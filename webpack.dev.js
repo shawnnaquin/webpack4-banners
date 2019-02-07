@@ -54,7 +54,7 @@ let getHTML = () => {
 	});
 
 	return html;
-	
+
 }
 
 let getEntries = () => { // https://webpack.js.org/concepts/entry-points/#multi-page-application
@@ -140,7 +140,10 @@ module.exports = {
 		contentBase: `dist/${ projectData.projectname }`,
 		writeToDisk: true,
 		publicPath: `/`,
-		port: 9000
+		port: 9000,
+		historyApiFallback: {
+		  index: `/landing/index.html`
+		}
 	}
 
 };
