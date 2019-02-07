@@ -1,8 +1,10 @@
 projectname: projectname
 projectPrettyName: Project Name
-projectDir: src/projects/projectname
-distDir: dist
+platform: Sizmek
 sizes:
-	- 160x600
-	- 300x600
-	- 728x90
+  160x600:
+    link: https://google.com/
+  300x600:
+    link: https://google.com/
+  728x90:
+    link: 

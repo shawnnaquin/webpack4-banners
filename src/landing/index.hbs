@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+	<title>Project Name Landing</title>
+</head>
+
+<body>
+	<header>
+		<div class="logo"></div>
+	</header>
+
+	{{#each htmlWebpackPlugin.options.data.sizes }}
+
+	<article class="size">
+
+		<figure>
+			<img src="" alt="Trulli" alt=""  title="" />
+			<figcaption>
+				{{ @key }} - {{ htmlWebpackPlugin.options.data.projectname }} banner
+			</figcaption>
+		</figure>
+
+		<ul>
+			<li>
+				<a class="local-link" href="../{{ @key }}/index.html" > Preview the {{ @key }} ad</a>
+			</li>
+			{{#if this.link }}
+			<li>
+				<a class="sizmek-link" href="{{ this.link }}" > View on {{ ../htmlWebpackPlugin.options.data.platform }} </a>
+			</li>
+			{{/if}}
+			
+		</ul>
+
+	</article>
+
+	{{/each}}
+
+	<footer>
+		&copy; Shawn Naquin 2019
+	</footer>
+		
+</body>
+
+</html>

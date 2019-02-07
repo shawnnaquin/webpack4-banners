@@ -1,17 +1,87 @@
+// utils
+const path = require('path');
+
+// plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+
+// storage
+let plugins = [];
+
+// project data
+const yaml = require('js-yaml');
+const fs = require('fs');
+const projectConfig = fs.readFileSync( path.resolve( __dirname, 'projectconfig.yml'),'utf8');
+const projectData = yaml.load( projectConfig );
+
+let getHTML = () => {
+
+  let html = [
+    new HtmlWebpackPlugin({
+      template: path.resolve( __dirname, `src/landing/index.hbs`),
+      chunks: [ 'landing' ],
+      hash: true,
+      inject: true,
+      alwaysWriteToDisk: true,
+      title: 'landing',
+      data: projectData,
+      filename: path.resolve( __dirname, `dist/${ projectData.projectname}/landing/index.html`)
+    })
+  ];
+
+  Object.keys( projectData.sizes ).forEach( (size) => {
+
+    let t = {};
+
+    t.template = path.resolve( __dirname, `src/projects/${ projectData.projectname }/${ size }/index.hbs`);
+    t.chunks = [ `${size}` ];
+    t.inject = true;
+    t.alwaysWriteToDisk = true;
+    t.title = `${size}`;
+    t.filename = path.resolve( __dirname, `dist/${ projectData.projectname }/${ size }/index.html`);
+
+    html.push( new HtmlWebpackPlugin(t) )
+  });
+
+  return html;
+
+}
+
+let getEntries = () => {
+  
+  let projectEntries = {
+    landing: `./src/landing/script.js`
+  };
+
+  Object.keys( projectData.sizes ).forEach( (size) => {
+    projectEntries[ size ] = `./src/projects/${ projectData.projectname }/${ size }/script.js`;
+  });
+
+  return projectEntries;
+
+};
+
+// combine plugins
+plugins = plugins.concat( 
+  [ new CleanWebpackPlugin( path.resolve( __dirname, 'dist' ) ) ],
+
+  getHTML(),
+
+  [
+    new HtmlWebpackHarddiskPlugin()
+  ] 
+
+)
 
 module.exports = {
 
-  // This option controls if and how source maps are generated.
-  // https://webpack.js.org/configuration/devtool/
-  devtool: 'eval-cheap-module-source-map',
+//   // This option controls if and how source maps are generated.
+//   // https://webpack.js.org/configuration/devtool/
+  devtool: 'cheap-eval-source-map',
 
   // https://webpack.js.org/concepts/entry-points/#multi-page-application
-  entry: {
-    index: './src/page-index/main.js',
-    about: './src/page-about/main.js',
-    contacts: './src/page-contacts/main.js'
-  },
+  entry: getEntries(),
 
   // https://webpack.js.org/configuration/dev-server/
   devServer: {
@@ -21,6 +91,7 @@ module.exports = {
   // https://webpack.js.org/concepts/loaders/
   module: {
     rules: [
+      { test: /\.hbs$/, loader: "handlebars-loader" },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -55,24 +126,18 @@ module.exports = {
   },
 
   // https://webpack.js.org/concepts/plugins/
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/page-index/tmpl.html',
-      inject: true,
-      chunks: ['index'],
-      filename: 'index.html'
-    }),
-    new HtmlWebpackPlugin({
-      template: './src/page-about/tmpl.html',
-      inject: true,
-      chunks: ['about'],
-      filename: 'about.html'
-    }),
-    new HtmlWebpackPlugin({
-      template: './src/page-contacts/tmpl.html',
-      inject: true,
-      chunks: ['contacts'],
-      filename: 'contacts.html'
-    })
-  ]
+  plugins: plugins,
+
+  output: {
+    path: path.join( __dirname, `dist/${ projectData.projectname }/scripts` ),
+    publicPath: '../scripts'
+  },
+
+  devServer: {
+    contentBase: `dist/${ projectData.projectname }`,
+    writeToDisk: true,
+    publicPath: `/`,
+    port: 9000
+  }
+
 };
