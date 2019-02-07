@@ -1,0 +1,37 @@
+{
+  "name": "webpack4-banners",
+  "version": "1.0.0",
+  "description": "Produce Banner Advertisments of multiple sizes",
+  "main": "webpack.dev.js",
+  "scripts": {
+    "test": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shawnnaquin/webpack4-banners.git"
+  },
+  "keywords": [
+    "banner",
+    "ads",
+    "sizmek"
+  ],
+  "author": "shawn naquin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shawnnaquin/webpack4-banners/issues"
+  },
+  "homepage": "https://github.com/shawnnaquin/webpack4-banners#readme",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.23.1",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.1.14",
+    "yaml": "^1.3.1"
+  }
+}
