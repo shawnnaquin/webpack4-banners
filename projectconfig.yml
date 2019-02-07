@@ -1,0 +1,8 @@
+projectname: projectname
+projectPrettyName: Project Name
+projectDir: src/projects/projectname
+distDir: dist
+sizes:
+	- 160x600
+	- 300x600
+	- 728x90
