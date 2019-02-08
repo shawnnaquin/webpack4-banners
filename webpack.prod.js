@@ -35,7 +35,7 @@ let getHTML = () => {
                 },
 			title: 'landing',
 			data: projectData,
-			filename: path.resolve( __dirname, `dist/${ projectData.projectname}/landing/index.html`)
+			filename: path.resolve( __dirname, `dist/landing/index.html`)
 
 		})
 
@@ -45,7 +45,7 @@ let getHTML = () => {
 
 		let t = {};
 
-		t.template = path.resolve( __dirname, `src/projects/${ projectData.projectname }/${ size }/index.hbs`);
+		t.template = path.resolve( __dirname, `src/sizes/${ size }/index.hbs`);
 		t.chunks = [ `${size}` ];
 		t.inject = true;
 		t.minify = {
@@ -53,7 +53,7 @@ let getHTML = () => {
                 };
 		t.alwaysWriteToDisk = true;
 		t.title = `${size}`;
-		t.filename = path.resolve( __dirname, `dist/${ projectData.projectname }/${ size }/index.html`);
+		t.filename = path.resolve( __dirname, `dist/${ size }/index.html`);
 
 		html.push(
 			new HtmlWebpackPlugin(t)
@@ -78,7 +78,7 @@ plugins = plugins.concat( // combine plugins // https://webpack.js.org/concepts/
 		}),
 		new CopyWebpackPlugin( [ {
 			from: path.resolve( __dirname, 'src/index.html'),
-			to: path.resolve( __dirname, `dist/${ projectData.projectname }/index.html`)
+			to: path.resolve( __dirname, `dist/index.html`)
 		} ] )
 	]
 
@@ -91,7 +91,7 @@ let getEntries = () => { // https://webpack.js.org/concepts/entry-points/#multi-
 	};
 
 	Object.keys( projectData.sizes ).forEach( (size) => {
-		projectEntries[ size ] = `./src/projects/${ projectData.projectname }/${ size }/script.js`;
+		projectEntries[ size ] = `./src/sizes/${ size }/script.js`;
 	});
 
 	return projectEntries;
@@ -103,11 +103,11 @@ let getAlias = ()=> {
 	let a = {
 		'@src': path.resolve( __dirname, 'src/'),
 		'@sizmek': path.resolve( __dirname, 'src/shared/sizmek/'),
-		'@project': path.resolve( __dirname, `src/projects/${ projectData.projectname }/`)
+		'@project': path.resolve( __dirname, `src/sizes/`)
 	};
 
 	Object.keys( projectData.sizes ).forEach( (size)=> {
-		a[`@${size}`] = path.resolve( __dirname, `src/projects/${ projectData.projectname }/${ size }/` )
+		a[`@${size}`] = path.resolve( __dirname, `src/sizes/${ size }/` )
 	});
 
 	return a;
@@ -225,7 +225,7 @@ module.exports = {
 	plugins: plugins,
 
 	output: {
-		path: path.join( __dirname, `dist/${ projectData.projectname }` ),
+		path: path.join( __dirname, `dist` ),
 		publicPath: '../',
 		filename: '[name]/index.js'
 	},

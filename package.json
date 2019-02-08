@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --hot --inline --config webpack.dev.js",
     "prod": "webpack --config webpack.prod.js",
-    "pack": "",
-    "test": "webpack"
+    "pack": "webpack --config webpack.pack.js && node zip.pack.js"
   },
   "repository": {
     "type": "git",
@@ -29,9 +28,11 @@
     "@babel/preset-env": "^7.3.1",
     "autoprefixer": "^9.4.7",
     "babel-loader": "^8.0.5",
+    "bestzip": "^2.1.2",
     "clean-webpack-plugin": "^1.0.1",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
+    "fs-extra": "^7.0.1",
     "handlebars": "^4.1.0",
     "handlebars-loader": "^1.7.1",
     "html-loader": "^0.5.5",
