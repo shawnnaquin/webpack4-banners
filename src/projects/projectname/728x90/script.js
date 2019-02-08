@@ -1,3 +1,3 @@
-require('@160x600/style.scss');
+require('@728x90/style.scss');
 
 console.log('hello world');
