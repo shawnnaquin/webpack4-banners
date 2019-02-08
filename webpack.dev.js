@@ -16,7 +16,6 @@ const fs = require('fs');
 const projectConfig = fs.readFileSync( path.resolve( __dirname, 'projectconfig.yml'),'utf8');
 const projectData = yaml.load( projectConfig );
 
-
 let getHTML = () => {
 
 	let html = [
@@ -71,6 +70,22 @@ let getEntries = () => { // https://webpack.js.org/concepts/entry-points/#multi-
 
 };
 
+let getAlias = ()=> {
+
+	let a = {
+		'@src': path.resolve( __dirname, 'src/'),
+		'@sizmek': path.resolve( __dirname, 'src/shared/sizmek/'),
+		'@project': path.resolve( __dirname, `src/projects/${ projectData.projectname }/`)
+	};
+
+	Object.keys( projectData.sizes ).forEach( (size)=> {
+		a[`@${size}`] = path.resolve( __dirname, `src/projects/${ projectData.projectname }/${ size }/` )
+	});
+
+	return a;
+
+};
+
 plugins = plugins.concat( // combine plugins // https://webpack.js.org/concepts/plugins/
 
 	[ 
@@ -85,9 +100,10 @@ plugins = plugins.concat( // combine plugins // https://webpack.js.org/concepts/
 
 module.exports = {
 
+	mode: 'development',
 	// https://webpack.js.org/configuration/devtool/
 	// This option controls if and how source maps are generated.
-	devtool: 'cheap-eval-source-map', 
+	devtool: 'inline-source-map', 
 
 	entry: getEntries(),
 
@@ -107,10 +123,11 @@ module.exports = {
 				}
 			},
 			{
-				test: /\.css$/,
+				test: /\.(css|scss)$/,
 				use: [
 					"style-loader",
-					"css-loader"
+					"css-loader",
+					"sass-loader"
 					// Please note we are not running postcss here
 				]
 			},
@@ -132,8 +149,9 @@ module.exports = {
 	plugins: plugins,
 
 	output: {
-		path: path.join( __dirname, `dist/${ projectData.projectname }/scripts` ),
-		publicPath: '../scripts'
+		path: path.join( __dirname, `dist/${ projectData.projectname }` ),
+		publicPath: '../',
+		filename: '[name]/index.js'
 	},
 
 	devServer: {
@@ -144,6 +162,10 @@ module.exports = {
 		historyApiFallback: {
 		  index: `/landing/index.html`
 		}
+	},
+
+	resolve: {
+		alias: getAlias()
 	}
 
 };
