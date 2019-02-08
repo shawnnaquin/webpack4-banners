@@ -13,15 +13,13 @@
 		<h1 class="version">{{htmlWebpackPlugin.options.data.projectPrettyName }} - {{htmlWebpackPlugin.options.data.version }}</h1>
 	</header>
 
+	<main>
 	{{#each htmlWebpackPlugin.options.data.sizes }}
-
 	<article class="size">
 
 		<figure>
-			<img src="" alt="Trulli" alt=""  title="" />
-			<figcaption>
-				{{ @key }} - {{ htmlWebpackPlugin.options.data.projectname }}
-			</figcaption>
+			<figcaption> {{ @key }} - {{ ../htmlWebpackPlugin.options.data.projectPrettyName }} </figcaption>
+			<img src="../{{ @key }}/screenshot.jpg" alt="Cat" title="cat" />
 		</figure>
 
 		<ul>
@@ -41,6 +39,8 @@
 	</article>
 
 	{{/each}}
+
+	</main>
 
 	<aside>
 		<a class="all-link" href="../zip/all-{{ htmlWebpackPlugin.options.data.projectname }}-{{ htmlWebpackPlugin.options.data.version }}.zip" > Download All Zip Files for {{htmlWebpackPlugin.options.data.projectPrettyName }} </a>
