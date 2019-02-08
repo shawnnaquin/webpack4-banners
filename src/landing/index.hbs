@@ -3,12 +3,14 @@
 <html lang="en">
 
 <head>
-	<title>Project Name Landing</title>
+	<title> {{htmlWebpackPlugin.options.data.projectPrettyName }} - {{htmlWebpackPlugin.options.data.version }}</title>
 </head>
 
 <body>
+
 	<header>
 		<div class="logo"></div>
+		<h1 class="version">{{htmlWebpackPlugin.options.data.projectPrettyName }} - {{htmlWebpackPlugin.options.data.version }}</h1>
 	</header>
 
 	{{#each htmlWebpackPlugin.options.data.sizes }}
@@ -18,24 +20,31 @@
 		<figure>
 			<img src="" alt="Trulli" alt=""  title="" />
 			<figcaption>
-				{{ @key }} - {{ htmlWebpackPlugin.options.data.projectname }} banner
+				{{ @key }} - {{ htmlWebpackPlugin.options.data.projectname }}
 			</figcaption>
 		</figure>
 
 		<ul>
 			<li>
-				<a class="local-link" href="../{{ @key }}/index.html" > Preview the {{ @key }} ad</a>
+				<a class="local-link" href="../{{ @key }}/index.html" > {{ @key }} Preview </a>
 			</li>
 			{{#if this.link }}
 			<li>
-				<a class="sizmek-link" href="{{ this.link }}" > View on {{ ../htmlWebpackPlugin.options.data.platform }} </a>
+				<a class="sizmek-link" href="{{ this.link }}" > {{ @key }} on {{ ../htmlWebpackPlugin.options.data.platform }} </a>
 			</li>
 			{{/if}}
+			<li>
+				<a class="zip-link" href="../zip/{{ @key }}-{{ ../htmlWebpackPlugin.options.data.projectname }}-{{ ../htmlWebpackPlugin.options.data.version }}.zip" > {{ @key }} Zip File Download </a>
+			</li>
 		</ul>
 
 	</article>
 
 	{{/each}}
+
+	<aside>
+		<a class="all-link" href="../zip/all-{{ htmlWebpackPlugin.options.data.projectname }}-{{ htmlWebpackPlugin.options.data.version }}.zip" > Download All Zip Files for {{htmlWebpackPlugin.options.data.projectPrettyName }} </a>
+	</aside>
 
 	<footer>
 		&copy; Shawn Naquin 2019

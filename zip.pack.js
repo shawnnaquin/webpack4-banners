@@ -5,18 +5,9 @@ const yaml = require('js-yaml');
 const fse = require('fs-extra');
 const projectConfig = fse.readFileSync( path.resolve( __dirname, 'projectconfig.yml'),'utf8');
 const projectData = yaml.load( projectConfig );
+projectData.version = require('./package.json').version;
 
-let clean = new Promise( (res, rej) => {
-
-	fse.emptyDir( path.resolve( __dirname, 'zip'), err => {
-	  if (err) {
-	  	rej(err);
-	  } else {
-	  	res('cleaned zips');
-	  }
-	});
-
-}).then( ()=> {
+fse.ensureDir( path.resolve( __dirname, 'dist/zip' ) ).then( ()=> {
 
 	let p = [];
 
@@ -27,7 +18,7 @@ let clean = new Promise( (res, rej) => {
 				zip(
 					{
 						source: '*',
-						destination: path.resolve( __dirname, `zip/${size}-${ projectData.projectname}.zip`),
+						destination: `../zip/${size}-${ projectData.projectname}-${ projectData.version }.zip`,
 						cwd: path.resolve( __dirname, `dist/${ size }`)
 					}
 				).then( ()=> {
@@ -43,7 +34,17 @@ let clean = new Promise( (res, rej) => {
 	});
 
 	Promise.all(p).then( ()=> {
-		console.log('done');
+		zip(
+			{
+				source: '*',
+				destination: `../zip/all-${ projectData.projectname}-${ projectData.version }.zip`,
+				cwd: path.resolve( __dirname, `dist/zip`)
+			}
+		).then( ()=> {
+			console.log('done');
+		}).catch( (err) => {
+			console.error(err.stack);
+		});
 	});
 
 });

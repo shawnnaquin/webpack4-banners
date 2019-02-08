@@ -15,6 +15,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const projectConfig = fs.readFileSync( path.resolve( __dirname, 'projectconfig.yml'),'utf8');
 const projectData = yaml.load( projectConfig );
+projectData.version = require('./package.json').version;
 
 let getHTML = () => {
 

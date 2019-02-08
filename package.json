@@ -5,8 +5,7 @@
   "main": "webpack.dev.js",
   "scripts": {
     "dev": "webpack-dev-server --hot --inline --config webpack.dev.js",
-    "prod": "webpack --config webpack.prod.js",
-    "pack": "webpack --config webpack.pack.js && node zip.pack.js"
+    "pack": "npm --no-git-tag-version version patch && webpack --config webpack.pack.js && node zip.pack.js"
   },
   "repository": {
     "type": "git",

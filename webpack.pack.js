@@ -7,6 +7,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const projectConfig = fs.readFileSync( path.resolve( __dirname, 'projectconfig.yml'),'utf8');
 const projectData = yaml.load( projectConfig );
+projectData.version = require('./package.json').version;
 
 // plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -127,7 +128,7 @@ Object.keys( projectData.sizes ).forEach( (size)=> {
         new HtmlWebpackPlugin({
 
           template: path.resolve( __dirname, `src/sizes/${ size }/index.hbs`),
-          hash: false,
+          hash: true,
           inject: true,
           alwaysWriteToDisk: true,
           minify: { collapseWhitespace: true },
@@ -148,11 +149,52 @@ Object.keys( projectData.sizes ).forEach( (size)=> {
         path: path.join( __dirname, `dist/${size}` ),
         publicPath: './',
         filename: 'index.js'
-      },
+      }
   }) );
 
 });
 
+Exports.push( Object.assign( {}, config, {
+
+  entry: `./src/landing/script.js`,
+
+  plugins: [
+
+    new CleanWebpackPlugin( path.resolve( __dirname, 'dist' ) ),
+
+    new HtmlWebpackPlugin({
+
+      template: path.resolve( __dirname, `src/landing/index.hbs`),
+      hash: true,
+      inject: true,
+      alwaysWriteToDisk: true,
+      minify: { collapseWhitespace: true },
+      title: projectData.projectname,
+      data: projectData,
+      filename: path.resolve( __dirname, `dist/landing/index.html`)
+
+    }),
+
+    new HtmlWebpackHarddiskPlugin(),
+
+    new MiniCssExtractPlugin({
+      filename: "style.css"
+    }),
+
+    new CopyWebpackPlugin( [ {
+      from: path.resolve( __dirname, 'src/index.html'),
+      to: path.resolve( __dirname, `dist/index.html`)
+    } ] )
+
+  ],
+
+  output: {
+    path: path.join( __dirname, `dist/landing` ),
+    publicPath: './',
+    filename: 'index.js'
+  }
+
+}) );
 
 // Return Array of Configurations
 module.exports = Exports;
