@@ -6,6 +6,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // storage
 let plugins = [];
@@ -16,6 +17,7 @@ const fs = require('fs');
 const projectConfig = fs.readFileSync( path.resolve( __dirname, 'projectconfig.yml'),'utf8');
 const projectData = yaml.load( projectConfig );
 projectData.version = require('./package.json').version;
+
 
 let getHTML = () => {
 
@@ -47,8 +49,14 @@ let getHTML = () => {
 		t.title = `${size}`;
 		t.filename = path.resolve( __dirname, `dist/${ size }/index.html`);
 
-		html.push( 
-			new HtmlWebpackPlugin(t) 
+		html.push(
+
+			new HtmlWebpackPlugin(t),
+
+			new CopyWebpackPlugin( [ {
+			  from: path.resolve( __dirname, `src/sizes/${ size }/screenshot.+(png|jpg|jpeg)`),
+			  to: path.resolve( __dirname, `dist/${ size }/screenshot.[ext]`)
+			} ] )
 		)
 
 	});
@@ -76,6 +84,7 @@ let getAlias = ()=> {
 	let a = {
 		'@src': path.resolve( __dirname, 'src/'),
 		'@sizmek': path.resolve( __dirname, 'src/shared/sizmek/'),
+		'@images': path.resolve( __dirname, 'src/shared/images/'),
 		'@project': path.resolve( __dirname, `src/sizes/`)
 	};
 
@@ -89,12 +98,12 @@ let getAlias = ()=> {
 
 plugins = plugins.concat( // combine plugins // https://webpack.js.org/concepts/plugins/
 
-	[ 
+	[
 		new CleanWebpackPlugin( path.resolve( __dirname, 'dist' ) ) 
 	],
 		getHTML(),
 	[
-		new HtmlWebpackHarddiskPlugin()
+		new HtmlWebpackHarddiskPlugin(),
 	]
 
 );
@@ -104,16 +113,16 @@ module.exports = {
 	mode: 'development',
 	// https://webpack.js.org/configuration/devtool/
 	// This option controls if and how source maps are generated.
-	devtool: 'inline-source-map', 
+	devtool: 'inline-source-map',
 
 	entry: getEntries(),
 
 	// https://webpack.js.org/concepts/loaders/
 	module: {
 		rules: [
-			{ 
-				test: /\.hbs$/, 
-				loader: "handlebars-loader" 
+			{
+				test: /\.hbs$/,
+				loader: "handlebars-template-loader"
 			},
 			{
 				test: /\.js$/,
@@ -133,16 +142,16 @@ module.exports = {
 				]
 			},
 			{
-				// Load all images as base64 encoding if they are smaller than 8192 bytes
-				test: /\.(png|jpg|gif|svg)$/,
-				use: [{
-					loader: 'url-loader',
-					options: {
-						// On development we want to see where the file is coming from, hence we preserve the [path]
-						name: '[path][name].[ext]?hash=[hash:20]',
-						limit: 8192
-					}
-				}]
+				test: /\.(jpe?g|png|gif|svg)$/i,
+				use: [
+				  {
+				    loader: 'file-loader',
+				    options: {
+				      outputPath: 'images/',
+				      publicPath: '../images/',
+				    }
+				  },
+				]
 			}
 		],
 	},
@@ -157,7 +166,7 @@ module.exports = {
 
 	devServer: {
 		contentBase: `dist`,
-		writeToDisk: true,
+		watchContentBase: true,
 		publicPath: `/`,
 		port: 9000,
 		historyApiFallback: {
