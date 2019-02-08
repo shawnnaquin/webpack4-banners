@@ -142,15 +142,55 @@ let config = {
 
 };
 
-let Exports = [];
+let Exports = [
+	Object.assign( {}, config, {
+
+		entry: `./src/landing/script.js`,
+
+		plugins: [
+
+		new CleanWebpackPlugin( path.resolve( __dirname, 'dist' ) ),
+
+		new HtmlWebpackPlugin({
+
+			template: path.resolve( __dirname, `src/landing/index.hbs`),
+			hash: true,
+			inject: true,
+			alwaysWriteToDisk: true,
+			minify: { collapseWhitespace: true },
+			title: projectData.projectname,
+			data: projectData,
+			filename: path.resolve( __dirname, `dist/landing/index.html`)
+
+		}),
+
+		new HtmlWebpackHarddiskPlugin(),
+
+		new MiniCssExtractPlugin({
+			filename: "style.css"
+		}),
+
+		new CopyWebpackPlugin( [ {
+			from: path.resolve( __dirname, 'src/index.html'),
+			to: path.resolve( __dirname, `dist/index.html`)
+		} ] )
+
+		],
+
+		output: {
+			path: path.join( __dirname, `dist/landing` ),
+			publicPath: './',
+			filename: 'index.js'
+		}
+
+	})
+];
 
 Object.keys( projectData.sizes ).forEach( (size)=> {
 
 	Exports.push( Object.assign({}, config, {
 		entry: `./src/sizes/${ size }/script.js`,
 		plugins: [
-
-			new CleanWebpackPlugin( path.resolve( __dirname, 'dist' ) ),
 
 			new HtmlWebpackPlugin({
 
@@ -198,48 +238,6 @@ Object.keys( projectData.sizes ).forEach( (size)=> {
 	}) );
 
 });
-
-Exports.push( Object.assign( {}, config, {
-
-	entry: `./src/landing/script.js`,
-
-	plugins: [
-
-	new CleanWebpackPlugin( path.resolve( __dirname, 'dist' ) ),
-
-	new HtmlWebpackPlugin({
-
-		template: path.resolve( __dirname, `src/landing/index.hbs`),
-		hash: true,
-		inject: true,
-		alwaysWriteToDisk: true,
-		minify: { collapseWhitespace: true },
-		title: projectData.projectname,
-		data: projectData,
-		filename: path.resolve( __dirname, `dist/landing/index.html`)
-
-	}),
-
-	new HtmlWebpackHarddiskPlugin(),
-
-	new MiniCssExtractPlugin({
-		filename: "style.css"
-	}),
-
-	new CopyWebpackPlugin( [ {
-		from: path.resolve( __dirname, 'src/index.html'),
-		to: path.resolve( __dirname, `dist/index.html`)
-	} ] )
-
-	],
-
-	output: {
-		path: path.join( __dirname, `dist/landing` ),
-		publicPath: './',
-		filename: 'index.js'
-	}
-
-}) );
 
 // Return Array of Configurations
 module.exports = Exports;
