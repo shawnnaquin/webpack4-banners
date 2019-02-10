@@ -170,10 +170,16 @@ let Exports = [
 			filename: "style.css"
 		}),
 
-		new CopyWebpackPlugin( [ {
-			from: path.resolve( __dirname, 'src/index.html'),
-			to: path.resolve( __dirname, `dist/index.html`)
-		} ] )
+		new CopyWebpackPlugin( [
+			{
+				from: path.resolve( __dirname, 'src/index.html'),
+				to: path.resolve( __dirname, `dist/index.html`)
+			},
+			{
+				from: path.resolve( __dirname, 'src/_redirects' ),
+				to: path.resolve( __dirname, 'src/_redirects' )
+			}
+		] )
 
 		],
 
