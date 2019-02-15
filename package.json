@@ -5,10 +5,10 @@
   "main": "webpack.dev.js",
   "scripts": {
     "dev": "webpack-dev-server --hot --inline --config webpack.dev.js",
-    "version": "npm --no-git-tag-version version patch ",
+    "bump": "npm --no-git-tag-version version patch ",
     "zip": "node zip.pack.js",
     "package": "webpack --config webpack.pack.js",
-    "pack": "npm run version && npm run package && npm run zip"
+    "pack": "npm run bump && npm run package && npm run zip"
   },
   "repository": {
     "type": "git",
