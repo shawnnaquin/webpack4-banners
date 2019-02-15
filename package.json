@@ -1,6 +1,6 @@
 {
   "name": "webpack4-banners",
-  "version": "1.0.88",
+  "version": "1.0.91",
   "description": "Produce Banner Advertisments of multiple sizes",
   "main": "webpack.dev.js",
   "scripts": {

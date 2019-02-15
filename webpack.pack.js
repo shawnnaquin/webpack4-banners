@@ -177,7 +177,7 @@ let Exports = [
 			},
 			{
 				from: path.resolve( __dirname, 'src/_redirects' ),
-				to: path.resolve( __dirname, 'dist/_redirects' )
+				to: path.resolve( __dirname, 'dist/[name]' )
 			}
 		] )
 
