@@ -7,8 +7,8 @@
     "dev": "webpack-dev-server --hot --inline --config webpack.dev.js",
     "version": "npm --no-git-tag-version version patch ",
     "zip": "node zip.pack.js",
-    "pack": "webpack --config webpack.pack.js",
-    "package": "npm run version && npm run pack && npm run zip"
+    "package": "webpack --config webpack.pack.js",
+    "pack": "npm run version && npm run package && npm run zip"
   },
   "repository": {
     "type": "git",
