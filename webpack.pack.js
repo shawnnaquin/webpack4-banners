@@ -185,7 +185,7 @@ let Exports = [
 
 		output: {
 			path: path.join( __dirname, `dist/landing` ),
-			publicPath: './',
+			publicPath: '/landing/',
 			filename: 'index.js'
 		}
 
@@ -238,7 +238,7 @@ Object.keys( projectData.sizes ).forEach( (size)=> {
 		],
 		output: {
 			path: path.join( __dirname, `dist/${size}` ),
-			publicPath: './',
+			publicPath: `/${size}/`,
 			filename: 'index.js'
 		}
 	}) );
